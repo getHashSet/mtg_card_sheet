@@ -1,13 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import App from './App.jsx';
 import * as serviceWorker from './serviceWorker';
+import allReducers from './reducers';
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import {BrowserRouter} from 'react-router-dom';
+
+// create store and add chrome extension tools for debuging via chrome. source: https://github.com/zalmoxisus/redux-devtools-extension
+const store = createStore(allReducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}> {/* This takes one attribute. store={theNameOfYourStore} */}
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root')
 );
 
