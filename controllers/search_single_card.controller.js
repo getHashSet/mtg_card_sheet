@@ -5,7 +5,7 @@ const axios = require("axios");
 router.route("/").post((req, res) => {
   console.log(req.body);
 
-  let singleCard = req.body.singleCard ? req.body.singleCard : null;
+  let singleCard = req.body.cardName ? req.body.cardName : null;
 
   singleCard != null
     ? axios({
