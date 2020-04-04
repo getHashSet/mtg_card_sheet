@@ -7,17 +7,16 @@ export default class SearchCard extends Component {
     
         this.state = {
              cardName: "hushbringer",
-             cardData: ""
+             cardData: "",
+             textAreaContent: ""
         }
+        this.seachThisCardName = this.seachThisCardName.bind(this);
     }
 
     seachThisCardName = () => {
-
-
-        axios({
-            method: "POST",
-            url: "/card",
-            data: { cardName: this.state.cardName }
+        axios.post( "/builder", {
+            cardName: this.state.cardName,
+            deck: this.state.textAreaContent
         })
         .then(res => {
             this.setState({
@@ -36,11 +35,17 @@ export default class SearchCard extends Component {
         });
     };
     
+    textAreaChange = (event) => {
+        this.setState({
+            textAreaContent: event.target.value
+        });
+    };
+
     render() {
         return (
             <div className="search_card_root" style={searchCardRoot}>
             <input type="text" onChange={this.inputChange} placeholder="Card Name" style={inputStyle}/>
-            <textarea name="card_input" id="" cols="" rows="30" style={{width: "100%"}}></textarea>
+            <textarea name="card_input" id="" cols="" rows="30" style={{width: "100%"}} onChange={this.textAreaChange}></textarea>
             <div className="btn" onClick={this.seachThisCardName} style={btn}>Give me the blocks</div>
             <img src={this.state.cardData} alt="a magic card" style={imgStyle}/>
         </div>

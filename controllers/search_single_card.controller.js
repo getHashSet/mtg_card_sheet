@@ -3,6 +3,7 @@ const axios = require("axios");
 
 // Create
 router.route("/").post((req, res) => {
+  console.log('route hit')
   console.log(req.body);
 
   let singleCard = req.body.cardName ? req.body.cardName : null;
