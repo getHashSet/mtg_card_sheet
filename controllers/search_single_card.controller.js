@@ -3,7 +3,6 @@ const axios = require("axios");
 
 // Create
 router.route("/").post((req, res) => {
-  res.send('got it');
   console.log(req.body);
 
   let singleCard = req.body.singleCard ? req.body.singleCard : null;

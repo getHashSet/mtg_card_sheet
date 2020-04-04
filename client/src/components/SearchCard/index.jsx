@@ -13,10 +13,11 @@ export default class SearchCard extends Component {
 
     seachThisCardName = () => {
 
+
         axios({
             method: "POST",
             url: "/card",
-            body: { cardName: this.state.cardName }
+            data: { cardName: this.state.cardName }
         })
         .then(res => {
             this.setState({
