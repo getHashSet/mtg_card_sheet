@@ -7,28 +7,26 @@ export default class SearchCard extends Component {
     
         this.state = {
              cardName: "hushbringer",
-             cardData: "/hush.jpg"
+             cardData: ""
         }
     }
 
     seachThisCardName = () => {
-        console.log("seaching.");
 
         axios({
-            method: 'get',
-            url: `https://api.scryfall.com/cards/named?fuzzy=${this.state.cardName.toLowerCase().trim().replace(/ /g, "+")}`,
+            method: "POST",
+            url: "/card",
+            body: { cardName: this.state.cardName }
         })
-        .then(scryfallData => {
-            console.log(scryfallData.data)
+        .then(res => {
             this.setState({
-                cardData: scryfallData.data.image_uris.large
-            });
-
+                cardData: res.data
+            })
         })
         .catch(err => {
-            console.log('error');
-            alert('No card found.');
-        });
+            console.error(err);
+        })
+        
     };
 
     inputChange = (event) => {
@@ -41,7 +39,8 @@ export default class SearchCard extends Component {
         return (
             <div className="search_card_root" style={searchCardRoot}>
             <input type="text" onChange={this.inputChange} placeholder="Card Name" style={inputStyle}/>
-            <div className="btn" onClick={this.seachThisCardName} style={btn}>Search Card</div>
+            <textarea name="card_input" id="" cols="" rows="30" style={{width: "100%"}}></textarea>
+            <div className="btn" onClick={this.seachThisCardName} style={btn}>Give me the blocks</div>
             <img src={this.state.cardData} alt="a magic card" style={imgStyle}/>
         </div>
         )
