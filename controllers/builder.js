@@ -144,7 +144,7 @@ router.route("/").post((req, res) => {
 
             let cleanDeckName = theFinalDeck.deckName.trim().toLowerCase().replace(/ /g, "_");
 
-            image.quality(60);
+            image.quality(50);
 
             image.write(`./decks/${cleanDeckName}.jpg`, function () {
               console.log("wrote image to root");
