@@ -67,8 +67,8 @@ router.route("/").post((req, res) => {
       theFinalDeck[key] = str.split("\n").filter((item) => item); // filter will remove "" values.
       theFinalDeck[key].forEach((arrayItem) => {
         let newObj = { name: "", prettyName: "", number: undefined };
-        newObj.number = +arrayItem.slice(0, 1);
-        newObj.prettyName = arrayItem.slice(1);
+        newObj.number = +arrayItem.slice(0, +arrayItem.indexOf(" "));
+        newObj.prettyName = arrayItem.slice(+arrayItem.indexOf(" "));
         newObj.image = "";
         newObj.name = newObj.prettyName
           .slice(1)
@@ -84,6 +84,7 @@ router.route("/").post((req, res) => {
     pushToArray(theFinalDeck.dirtyLands, "lands");
 
     for (let i = 0; i < theFinalDeck.final_creatures.length; i++) {
+      console.log("calling creatures")
       apiCall(
         theFinalDeck.final_creatures[i].name,
         i,
@@ -93,6 +94,7 @@ router.route("/").post((req, res) => {
     }
 
     for (let i = 0; i < theFinalDeck.final_spells.length; i++) {
+      console.log("calling spells")
       apiCall(
         theFinalDeck.final_spells[i].name,
         i,
@@ -102,6 +104,7 @@ router.route("/").post((req, res) => {
     }
 
     for (let i = 0; i < theFinalDeck.final_lands.length; i++) {
+      console.log("calling lands")
       apiCall(
         theFinalDeck.final_lands[i].name,
         i,
@@ -155,6 +158,7 @@ router.route("/").post((req, res) => {
     }, 15000);
 
     function apiCall(name, i, key, numberOfCards) {
+      console.log(`creating sticker for ${name}`);
       axios({
         method: "GET",
         url: `https://api.scryfall.com/cards/named?fuzzy=${name}`,
