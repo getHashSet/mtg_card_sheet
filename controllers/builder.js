@@ -218,7 +218,7 @@ router.route("/").post((req, res) => {
 
                       image.write(`./decks/${cleanDeckName}.jpg`, function () {
                         console.log("wrote image to root");
-                        res.json({message: "uploaded", url: `https://mtgchad.herokuapp.com/deck/${cleanDeckName}`});
+                        res.send({message: "uploaded", url: `https://mtgchad.herokuapp.com/deck/${cleanDeckName}`})
                       });
                     });
                   });

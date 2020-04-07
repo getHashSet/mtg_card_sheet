@@ -10,12 +10,16 @@ export default class SearchCard extends Component {
              cardData: "",
              textAreaContent: "",
              link: "#",
+             button: "Build Deck",
              message: "Not Ready Yet"
         }
         this.seachThisCardName = this.seachThisCardName.bind(this);
     }
 
     seachThisCardName = () => {
+
+        this.setState({button: "loading..."})
+
         axios.post( "/builder", {
             cardName: this.state.cardName,
             deck: this.state.textAreaContent
@@ -25,7 +29,7 @@ export default class SearchCard extends Component {
             this.setState({
                 cardData: res.data
             })
-            this.setState({link: res.data.url, message: "Visit My Deck Page"})
+            this.setState({link: res.data.url, message: "Visit My Deck Page", button: "Build Deck"})
         })
         .catch(err => {
             console.error(err);
@@ -50,8 +54,8 @@ export default class SearchCard extends Component {
             <div className="search_card_root" style={searchCardRoot}>
             <input type="text" onChange={this.inputChange} placeholder="Card Name" style={inputStyle}/>
             <textarea name="card_input" id="" cols="" rows="30" style={{width: "100%"}} onChange={this.textAreaChange}></textarea>
-            <div className="btn" onClick={this.seachThisCardName} style={btn}>Build Deck</div>
-            {/* <img src={this.state.cardData} alt="a magic card" style={imgStyle}/> */}
+        <div className="btn" onClick={this.seachThisCardName} style={btn}>{this.state.button}</div>
+            <img src={this.state.cardData} alt="a magic card" style={imgStyle}/>
         <a href={this.state.link} target="_blank" rel="noopener noreferrer">{this.state.message}</a>
         </div>
         )
