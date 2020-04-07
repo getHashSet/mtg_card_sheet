@@ -32,7 +32,7 @@ export default class SearchCard extends Component {
             this.setState({link: res.data.url, message: "Visit My Deck Page", button: "Build Deck"})
         })
         .catch(err => {
-            console.error(err);
+            this.setState({button: "Build Deck"})
         })
         
     };
