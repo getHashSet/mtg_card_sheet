@@ -122,6 +122,7 @@ const searchCardRoot = {
 
 const imgStyle = {
   width: "100%",
+  maxWidth: "256px",
   fontFamily: "'Open Sans', sans-serif",
 };
 
