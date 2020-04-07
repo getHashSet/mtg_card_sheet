@@ -194,7 +194,7 @@ router.route("/").post((req, res) => {
                       console.log('got blank page.');
                       
                       for (let k = 0; k < jimps.length; k++) {
-                        image.quality(50);
+                        image.quality(30);
 
                         image.composite(
                           data[k],
@@ -214,7 +214,7 @@ router.route("/").post((req, res) => {
                         .toLowerCase()
                         .replace(/ /g, "_");
 
-                      image.quality(50);
+                      image.quality(40);
 
                       image.write(`./decks/${cleanDeckName}.jpg`, function () {
                         console.log("wrote image to root");
