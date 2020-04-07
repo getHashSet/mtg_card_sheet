@@ -83,99 +83,146 @@ router.route("/").post((req, res) => {
     pushToArray(theFinalDeck.dirtySpells, "spells");
     pushToArray(theFinalDeck.dirtyLands, "lands");
 
-    for (let i = 0; i < theFinalDeck.final_creatures.length; i++) {
-      console.log("calling creatures")
-      apiCall(
-        theFinalDeck.final_creatures[i].name,
-        i,
-        "final_creatures",
-        theFinalDeck.final_creatures[i].number
-      );
-    }
+    // this is every card object in the deck. Now we make our axios call.
 
-    for (let i = 0; i < theFinalDeck.final_spells.length; i++) {
-      console.log("calling spells")
-      apiCall(
-        theFinalDeck.final_spells[i].name,
-        i,
-        "final_spells",
-        theFinalDeck.final_spells[i].number
-      );
-    }
-
-    for (let i = 0; i < theFinalDeck.final_lands.length; i++) {
-      console.log("calling lands")
-      apiCall(
-        theFinalDeck.final_lands[i].name,
-        i,
-        "final_lands",
-        theFinalDeck.final_lands[i].number
-      );
-    }
-
-    setTimeout(() => { ////// this should really be a promise all
-      /////////
-      // JIMP
-      /////////
-
-      let cardWidth = 488;
-      let cardHeight = 680;
-      let row = 0;
-      let col = 0;
-      let jimps = [];
-
-      for (let q = 0; q < theFinalDeck.all60Cards.length; q++) {
-        jimps.push(jimp.read(theFinalDeck.all60Cards[q]));
-      }
-
-      Promise.all(jimps)
-        .then(function (data) {
-          return Promise.all(jimps);
-        })
-        .then(function (data) {
-          jimp.read(__dirname + "/blank.jpg").then((image) => {
-
-            for (k = 0; k < jimps.length; k++) {
-              image.composite(data[k], (row * cardWidth), (col * cardHeight));
-              if (row === 9) {
-                row = 0
-                col++
-              } else {
-                row++
-              };
-            };
-
-            let cleanDeckName = theFinalDeck.deckName.trim().toLowerCase().replace(/ /g, "_");
-
-            image.quality(50);
-
-            image.write(`./decks/${cleanDeckName}.jpg`, function () {
-              console.log("wrote image to root");
-              res.json(theFinalDeck);
-            });
-          });
-        });
-    }, 15000);
-
-    function apiCall(name, i, key, numberOfCards) {
-      console.log(`creating sticker for ${name}`);
-      axios({
+    const everyCreatureCard = theFinalDeck.final_creatures.map((cardObj) => {
+      return axios({
         method: "GET",
-        url: `https://api.scryfall.com/cards/named?fuzzy=${name}`,
+        url: `https://api.scryfall.com/cards/named?fuzzy=${cardObj.name}`,
       })
         .then((scryfallData) => {
-          let cardURL = scryfallData.data.image_uris.normal;
+          const cardURL = scryfallData.data.image_uris.normal;
 
-          for (let j = 0; j < numberOfCards; j++) {
+          for (let j = 0; j < cardObj.number; j++) {
             theFinalDeck["all60Cards"].push(cardURL);
           }
 
-          theFinalDeck[key][i].image = cardURL;
+          cardObj.image = cardURL;
         })
         .catch((err) => {
-          console.log("error");
+          console.error(err);
         });
-    }
+    });
+
+    Promise.all(everyCreatureCard)
+      .then(function (data) {
+        return Promise.all(everyCreatureCard);
+      })
+      .then(function (data) {
+        /////// spells ///////////
+        const everySpellCard = theFinalDeck.final_spells.map((cardObj) => {
+          return axios({
+            method: "GET",
+            url: `https://api.scryfall.com/cards/named?fuzzy=${cardObj.name}`,
+          })
+            .then((scryfallData) => {
+              const cardURL = scryfallData.data.image_uris.normal;
+
+              for (let j = 0; j < cardObj.number; j++) {
+                theFinalDeck["all60Cards"].push(cardURL);
+              }
+
+              cardObj.image = cardURL;
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        });
+
+        Promise.all(everySpellCard)
+          .then(function (data) {
+            return Promise.all(everySpellCard);
+          })
+          .then(function (data) {
+            ///////// lands ////////
+            const everyLandCard = theFinalDeck.final_lands.map((cardObj) => {
+              return axios({
+                method: "GET",
+                url: `https://api.scryfall.com/cards/named?fuzzy=${cardObj.name}`,
+              })
+                .then((scryfallData) => {
+                  const cardURL = scryfallData.data.image_uris.normal;
+
+                  for (let j = 0; j < cardObj.number; j++) {
+                    theFinalDeck["all60Cards"].push(cardURL);
+                  }
+
+                  cardObj.image = cardURL;
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+            });
+
+            Promise.all(everyLandCard)
+              .then(function (data) {
+                return Promise.all(everyLandCard);
+              })
+
+              //////// jimp /////////////
+              .then(function (data) {
+                console.log("jimp started.");
+                // /////////
+                // // JIMP
+                // /////////
+
+                let cardWidth = 488;
+                let cardHeight = 680;
+                let row = 0;
+                let col = 0;
+                let jimps = [];
+                let totalJimps = 0;
+                console.log(
+                  `total cards to stick: ${theFinalDeck.all60Cards.length}`
+                );
+                let totalCallbacks = theFinalDeck.all60Cards.length;
+
+                for (let q = 0; q < totalCallbacks; q++) {
+                  totalJimps++;
+                  console.log(`total images jimped: ${totalJimps}`);
+                  jimps.push(jimp.read(theFinalDeck.all60Cards[q]));
+                }
+
+                Promise.all(jimps)
+                  .then(function (data) {
+                    console.log("jimp promise");
+                    return Promise.all(jimps);
+                  })
+                  .then(function (data) {
+                    console.log("sticking images to blank.jpg");
+                    jimp.read(__dirname + "/blank.jpg").then((image) => {
+                      console.log('got blank page.');
+                      
+                      for (let k = 0; k < jimps.length; k++) {
+                        image.composite(
+                          data[k],
+                          row * cardWidth,
+                          col * cardHeight
+                        );
+                        if (row === 9) {
+                          row = 0;
+                          col++;
+                        } else {
+                          row++;
+                        }
+                      }
+
+                      let cleanDeckName = theFinalDeck.deckName
+                        .trim()
+                        .toLowerCase()
+                        .replace(/ /g, "_");
+
+                      image.quality(50);
+
+                      image.write(`./decks/${cleanDeckName}.jpg`, function () {
+                        console.log("wrote image to root");
+                        res.json(theFinalDeck);
+                      });
+                    });
+                  });
+              });
+          });
+      });
   } else {
     res.json({ error: "Unable to Build Deck.", message: null });
   }
