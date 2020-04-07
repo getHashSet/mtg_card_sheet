@@ -194,6 +194,8 @@ router.route("/").post((req, res) => {
                       console.log('got blank page.');
                       
                       for (let k = 0; k < jimps.length; k++) {
+                        image.quality(50);
+
                         image.composite(
                           data[k],
                           row * cardWidth,
