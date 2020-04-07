@@ -9,7 +9,7 @@ export default class SearchCard extends Component {
       cardName: "hushbringer",
       cardData: "",
       textAreaContent: "",
-      link: "#",
+      link: "",
       button: "Build Deck",
       message: "Not Ready Yet",
     };
