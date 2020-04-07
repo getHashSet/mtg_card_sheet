@@ -17,6 +17,7 @@ export default class SearchCard extends Component {
     }
 
     seachThisCardName = () => {
+        let deckName = this.state.textAreaContent.slice( this.state.textAreaContent.indexOf('Deck: ') + 6, this.state.textAreaContent.indexOf('.dec')).trim().replace(/ /g, "_").toLowerCase();
 
         this.setState({button: "loading..."})
 
@@ -32,7 +33,7 @@ export default class SearchCard extends Component {
             this.setState({link: res.data.url, message: "Visit My Deck Page", button: "Build Deck"})
         })
         .catch(err => {
-            this.setState({button: "Build Deck"})
+            this.setState({link: `https://mtgchad.herokuapp.com/deck/${deckName}`, button: "Build Deck"})
         })
         
     };
