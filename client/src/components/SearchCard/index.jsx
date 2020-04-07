@@ -91,7 +91,7 @@ export default class SearchCard extends Component {
         <img src={this.state.cardData} alt="a magic card" style={imgStyle} />
         <br />
         <br />
-        <a href={this.state.link} target="_blank" rel="noopener noreferrer">
+        <a href={this.state.link} target="_blank" rel="noopener noreferrer" style={{textDecoration: "none"}}>
           <div style={aTag}>{this.state.message}</div>
         </a>
         <br />
