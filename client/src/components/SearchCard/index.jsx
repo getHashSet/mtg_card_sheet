@@ -48,7 +48,7 @@ export default class SearchCard extends Component {
         this.setState({
           link: `https://mtgchad.herokuapp.com/deck/${deckName}`,
           button: "Build Deck",
-          message: "Click here to visit Card Sheet"
+          message: "Click here to visit Card Sheet",
         });
       });
   };
@@ -87,12 +87,12 @@ export default class SearchCard extends Component {
         <div className="btn" onClick={this.seachThisCardName} style={btn}>
           {this.state.button}
         </div>
-        <br/>
+        <br />
         <img src={this.state.cardData} alt="a magic card" style={imgStyle} />
         <br />
         <br />
         <a href={this.state.link} target="_blank" rel="noopener noreferrer">
-          {this.state.message}
+          <div style={aTag}>{this.state.message}</div>
         </a>
         <br />
       </div>
@@ -132,3 +132,10 @@ const inputStyle = {
   fontFamily: "'Open Sans', sans-serif",
   margin: "2px",
 };
+
+const aTag = {
+    padding: "1em 0",
+    backgroundColor: "#2ecc71",
+    color: "#ffffff",
+    textAlign: "center"
+}
