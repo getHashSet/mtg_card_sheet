@@ -7,7 +7,7 @@ export default class SearchCard extends Component {
 
     this.state = {
       cardName: "hushbringer",
-      cardData: "",
+      cardData: "https://img.scryfall.com/cards/normal/front/7/2/7220aaa0-c457-4067-b1ff-360b161c34e5.jpg?1562850134",
       textAreaContent: "",
       link: "",
       button: "Build Deck",
