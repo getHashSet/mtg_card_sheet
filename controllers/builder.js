@@ -2,6 +2,8 @@ const router = require("express").Router();
 const axios = require("axios");
 const jimp = require("jimp");
 
+axios.defaults.timeout = 50000;
+
 // Create
 router.route("/").post((req, res) => {
   // console.log(req.body.deck);

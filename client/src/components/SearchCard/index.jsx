@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+axios.defaults.timeout = 50000;
+
 export default class SearchCard extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +37,7 @@ export default class SearchCard extends Component {
       .post("/builder", {
         cardName: this.state.cardName,
         deck: this.state.textAreaContent,
-      }, { timeout: 50000})
+      }, { timeout: 50000 })
       .then((res) => {
 
         let theLink = res.data.url 
