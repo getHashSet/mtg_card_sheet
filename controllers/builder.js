@@ -13,6 +13,7 @@ router.route("/").post((req, res) => {
     dirtyCreatures: "",
     dirtySpells: "",
     dirtyLands: "",
+    dirtySideboard: "",
     creatures: [],
     spells: [],
     lands: [],
@@ -43,15 +44,17 @@ router.route("/").post((req, res) => {
       : res.send({ message: "No card found" });
   } else if (theDeck !== null) {
     if (theDeck.indexOf("Deck:") !== -1) {
-      theFinalDeck.deckName = theDeck.slice(
-        +theDeck.indexOf("Deck:") + 6,
-        +theDeck.indexOf("\n") - 4
-      ).trim().toLowerCase().replace(/ /g, "_") + happyEnding;
+      theFinalDeck.deckName =
+        theDeck
+          .slice(+theDeck.indexOf("Deck:") + 6, +theDeck.indexOf("\n") - 4)
+          .trim()
+          .toLowerCase()
+          .replace(/ /g, "_") + happyEnding;
     } else {
       theFinalDeck.deckName = "untitled" + happyEnding; // make this random
-    } 
+    }
 
-    console.log(theFinalDeck.deckName)
+    console.log(theFinalDeck.deckName);
 
     theFinalDeck.dirtyCreatures = theDeck.slice(
       +theDeck.indexOf("Creatures:"),
@@ -62,9 +65,15 @@ router.route("/").post((req, res) => {
       +theDeck.indexOf("Lands:")
     );
 
-    theDeck.indexOf("Sideboard:") !== -1 
-    ? theFinalDeck.dirtyLands = theDeck.slice( +theDeck.indexOf("Lands:"), +theDeck.indexOf("Sideboard" ))
-    : theFinalDeck.dirtyLands = theDeck.slice( +theDeck.indexOf("Lands:"), +theDeck.indexOf("Created with Decked Builder" ));
+    theDeck.indexOf("Sideboard:") !== -1
+      ? (theFinalDeck.dirtyLands = theDeck.slice(
+          +theDeck.indexOf("Lands:"),
+          +theDeck.indexOf("Sideboard")
+        ))
+      : (theFinalDeck.dirtyLands = theDeck.slice(
+          +theDeck.indexOf("Lands:"),
+          +theDeck.indexOf("Created with Decked Builder")
+        ));
 
     function pushToArray(str, key) {
       str = str.slice(+str.indexOf("\n"));
@@ -192,8 +201,8 @@ router.route("/").post((req, res) => {
                   })
                   .then(function (data) {
                     jimp.read(__dirname + "/blank.jpg").then((image) => {
-                      console.log('got blank page.');
-                      
+                      console.log("got blank page.");
+
                       for (let k = 0; k < jimps.length; k++) {
                         image.quality(30);
 
@@ -210,16 +219,15 @@ router.route("/").post((req, res) => {
                         }
                       }
 
-                      let cleanDeckName = theFinalDeck.deckName
-                        .trim()
-                        .toLowerCase()
-                        .replace(/ /g, "_");
-
                       image.quality(40);
 
-                      image.write(`./decks/${cleanDeckName}.jpg`, function () {
+                      image.write(`./decks/${theFinalDeck.deckName}.jpg`, function () {
+
                         console.log("wrote image to root");
-                        res.send({message: "uploaded", url: `https://mtgchad.herokuapp.com/deck/${cleanDeckName}`})
+                        res.json({
+                          message: "uploaded",
+                          url: `https://mtgchad.herokuapp.com/deck/${cleanDeckName}`,
+                        });
                       });
                     });
                   });
