@@ -22,9 +22,7 @@ router.route("/").post((req, res) => {
     all60Cards: [],
   };
 
-  let now = new Date();
-
-  now = `-${now.getMilliseconds()}${now.getDate()}${now.getHours()}${now.getMinutes()}`;
+  let happyEnding = Date.now();
 
   if (singleCard !== null && theDeck === null) {
     singleCard != null
@@ -48,9 +46,9 @@ router.route("/").post((req, res) => {
       theFinalDeck.deckName = theDeck.slice(
         +theDeck.indexOf("Deck:") + 6,
         +theDeck.indexOf("\n") - 4
-      ).trim().toLowerCase().replace(/ /g, "_") + now;
+      ).trim().toLowerCase().replace(/ /g, "_") + happyEnding;
     } else {
-      theFinalDeck.deckName = "untitled" + now; // make this random
+      theFinalDeck.deckName = "untitled" + happyEnding; // make this random
     } 
 
     console.log(theFinalDeck.deckName)
