@@ -22,6 +22,10 @@ router.route("/").post((req, res) => {
     all60Cards: [],
   };
 
+  let now = new Date();
+
+  now = `-${now.getMilliseconds()}${now.getDate()}${now.getHours()}${now.getMinutes()}`;
+
   if (singleCard !== null && theDeck === null) {
     singleCard != null
       ? axios({
@@ -44,10 +48,12 @@ router.route("/").post((req, res) => {
       theFinalDeck.deckName = theDeck.slice(
         +theDeck.indexOf("Deck:") + 6,
         +theDeck.indexOf("\n") - 4
-      );
+      ).trim().toLowerCase().replace(/ /g, "_") + now;
     } else {
-      theFinalDeck.deckName = "Untitled Deck";
-    }
+      theFinalDeck.deckName = "untitled" + now; // make this random
+    } 
+
+    console.log(theFinalDeck.deckName)
 
     theFinalDeck.dirtyCreatures = theDeck.slice(
       +theDeck.indexOf("Creatures:"),
@@ -57,10 +63,10 @@ router.route("/").post((req, res) => {
       +theDeck.indexOf("Spells:"),
       +theDeck.indexOf("Lands:")
     );
-    theFinalDeck.dirtyLands = theDeck.slice(
-      +theDeck.indexOf("Lands:"),
-      +theDeck.indexOf("Created with Decked Builder")
-    );
+
+    theDeck.indexOf("Sideboard:") !== -1 
+    ? theFinalDeck.dirtyLands = theDeck.slice( +theDeck.indexOf("Lands:"), +theDeck.indexOf("Sideboard" ))
+    : theFinalDeck.dirtyLands = theDeck.slice( +theDeck.indexOf("Lands:"), +theDeck.indexOf("Created with Decked Builder" ));
 
     function pushToArray(str, key) {
       str = str.slice(+str.indexOf("\n"));
@@ -179,17 +185,14 @@ router.route("/").post((req, res) => {
 
                 for (let q = 0; q < totalCallbacks; q++) {
                   totalJimps++;
-                  console.log(`total images jimped: ${totalJimps}`);
                   jimps.push(jimp.read(theFinalDeck.all60Cards[q]));
                 }
 
                 Promise.all(jimps)
                   .then(function (data) {
-                    console.log("jimp promise");
                     return Promise.all(jimps);
                   })
                   .then(function (data) {
-                    console.log("sticking images to blank.jpg");
                     jimp.read(__dirname + "/blank.jpg").then((image) => {
                       console.log('got blank page.');
                       

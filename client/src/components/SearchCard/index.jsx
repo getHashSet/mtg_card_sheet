@@ -7,9 +7,10 @@ export default class SearchCard extends Component {
 
     this.state = {
       cardName: "hushbringer",
-      cardData: "https://img.scryfall.com/cards/normal/front/7/2/7220aaa0-c457-4067-b1ff-360b161c34e5.jpg?1562850134",
+      cardData:
+        "https://img.scryfall.com/cards/normal/front/7/2/7220aaa0-c457-4067-b1ff-360b161c34e5.jpg?1562850134",
       textAreaContent: "",
-      link: "",
+      link: "https://img.scryfall.com/cards/normal/front/7/2/7220aaa0-c457-4067-b1ff-360b161c34e5.jpg?1562850134",
       button: "Build Deck",
       message: "Not Ready Yet",
     };
@@ -42,6 +43,7 @@ export default class SearchCard extends Component {
           link: res.data.url,
           message: "Visit My Deck Page",
           button: "Build Deck",
+          cardData: `https://mtgchad.herokuapp.com/deck/${deckName}`
         });
       })
       .catch((err) => {
@@ -49,6 +51,7 @@ export default class SearchCard extends Component {
           link: `https://mtgchad.herokuapp.com/deck/${deckName}`,
           button: "Build Deck",
           message: "Click here to visit Card Sheet",
+          cardData: `https://mtgchad.herokuapp.com/deck/${deckName}`
         });
       });
   };
@@ -83,15 +86,24 @@ export default class SearchCard extends Component {
           rows="20"
           style={{ width: "100%" }}
           onChange={this.textAreaChange}
+          placeholder="Copy From Decked App on Mobile"
         ></textarea>
         <div className="btn" onClick={this.seachThisCardName} style={btn}>
           {this.state.button}
         </div>
-        <br />
-        <img src={this.state.cardData} alt="a magic card" style={imgStyle} />
-        <br />
-        <br />
-        <a href={this.state.link} target="_blank" rel="noopener noreferrer" style={{textDecoration: "none"}}>
+
+        <div className="img_wrap">
+            <a href={this.state.link} target="_blank" rel="noopener noreferrer">
+                <img src={this.state.cardData} alt="a magic card" style={imgStyle} />
+            </a>
+        </div>
+
+        <a
+          href={this.state.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ textDecoration: "none" }}
+        >
           <div style={aTag}>{this.state.message}</div>
         </a>
         <br />
@@ -134,8 +146,8 @@ const inputStyle = {
 };
 
 const aTag = {
-    padding: "1em 0",
-    backgroundColor: "#2ecc71",
-    color: "#ffffff",
-    textAlign: "center"
-}
+  padding: "1em 0",
+  backgroundColor: "#2ecc71",
+  color: "#ffffff",
+  textAlign: "center",
+};
