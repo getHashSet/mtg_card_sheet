@@ -23,8 +23,6 @@ router.route("/").post((req, res) => {
     all60Cards: [],
   };
 
-  let happyEnding = Date.now();
-
   if (singleCard !== null && theDeck === null) {
     singleCard != null
       ? axios({
@@ -49,9 +47,9 @@ router.route("/").post((req, res) => {
           .slice(+theDeck.indexOf("Deck:") + 6, +theDeck.indexOf("\n") - 4)
           .trim()
           .toLowerCase()
-          .replace(/ /g, "_") + happyEnding;
+          .replace(/ /g, "_");
     } else {
-      theFinalDeck.deckName = "untitled" + happyEnding; // make this random
+      theFinalDeck.deckName = "untitled"; // make this random
     }
 
     console.log(theFinalDeck.deckName);
