@@ -35,15 +35,16 @@ export default class SearchCard extends Component {
         deck: this.state.textAreaContent,
       })
       .then((res) => {
-        console.log(res.data);
+
+        let theLink = res.data.url 
+        ? res.data.url
+        : res.data;
+
         this.setState({
-          cardData: res.data,
-        });
-        this.setState({
-          link: res.data.url,
+          link: theLink,
           message: "Visit My Deck Page",
           button: "Build Deck",
-          cardData: `https://mtgchad.herokuapp.com/deck/${deckName}`
+          cardData: theLink
         });
       })
       .catch((err) => {
@@ -71,23 +72,28 @@ export default class SearchCard extends Component {
   render() {
     return (
       <div className="search_card_root" style={searchCardRoot}>
+
         <p>Enter a Card name here and click Build to see that card.</p>
+
         <input
           type="text"
           onChange={this.inputChange}
           placeholder="Card Name"
           style={inputStyle}
         />
+
         <p>Paste iOS version of Deck Builder content here then click Build.</p>
+
         <textarea
           name="card_input"
           id=""
           cols=""
           rows="20"
-          style={{ width: "100%" }}
+          style={{ width: "98%" }}
           onChange={this.textAreaChange}
           placeholder="Copy From Decked App on Mobile"
         ></textarea>
+        
         <div className="btn" onClick={this.seachThisCardName} style={btn}>
           {this.state.button}
         </div>
@@ -139,10 +145,10 @@ const imgStyle = {
 };
 
 const inputStyle = {
-  width: "100%",
+  width: "90%",
   height: "2em",
   fontFamily: "'Open Sans', sans-serif",
-  margin: "2px",
+  margin: "2px 0",
 };
 
 const aTag = {
