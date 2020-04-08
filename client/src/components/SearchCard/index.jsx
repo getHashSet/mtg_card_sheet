@@ -37,7 +37,7 @@ export default class SearchCard extends Component {
       .post("/builder", {
         cardName: this.state.cardName,
         deck: this.state.textAreaContent,
-      }, { timeout: 50000 })
+      }, { timeout: 100000 })
       .then((res) => {
 
         let theLink = res.data.url 
