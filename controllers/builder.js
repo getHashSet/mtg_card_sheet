@@ -2,6 +2,10 @@ const router = require("express").Router();
 const axios = require("axios");
 const jimp = require("jimp");
 
+const httpClient = axios.create();
+
+httpClient.defaults.timeout = 50000;
+
 // Create
 router.route("/").post((req, res) => {
   // console.log(req.body.deck);
@@ -224,7 +228,7 @@ router.route("/").post((req, res) => {
                         console.log("wrote image to root");
                         res.json({
                           message: "uploaded",
-                          url: `https://mtgchad.herokuapp.com/deck/${cleanDeckName}`,
+                          url: `https://mtgchad.herokuapp.com/deck/${theFinalDeck.deckName}`,
                         });
                       });
                     });
