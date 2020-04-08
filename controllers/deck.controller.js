@@ -1,9 +1,13 @@
 const router = require("express").Router();
-const path = require('path');
+const axios = require("axios");
 
 router.route('/:id').get((req, res) => {
-    let imageName = req.params.id.toLowerCase();
-    res.sendFile(path.join(__dirname, `../decks/${imageName}.jpg`));
+    let imageName = req.params.id;
+    console.log('start')
+    console.log(`https://mtgchadbucket.s3-us-west-1.amazonaws.com/${imageName}.jpg`);
+
+    res.redirect(`https://mtgchadbucket.s3-us-west-1.amazonaws.com/${imageName}.jpg`);
+  
 });
 
 module.exports = router;

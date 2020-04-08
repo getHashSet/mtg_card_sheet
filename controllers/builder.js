@@ -1,8 +1,27 @@
 const router = require("express").Router();
 const axios = require("axios");
 const jimp = require("jimp");
+const fs = require('fs');
+const path = require('path');
+const AWS = require('aws-sdk');
+require("dotenv").config();
 
-axios.defaults.timeout = 50000;
+// params for AWS bucket
+const ID = process.env.S3_ID;
+const SECRET = process.env.S3_SECRET;
+const BUCKET_NAME = process.env.BUCKET_NAME;
+
+const s3 = new AWS.S3({
+    accessKeyId: ID,
+    secretAccessKey: SECRET
+});
+
+
+
+
+
+
+axios.defaults.timeout = 100000;
 
 // Create
 router.route("/").post((req, res) => {
@@ -224,10 +243,46 @@ router.route("/").post((req, res) => {
                       image.write(`./decks/${theFinalDeck.deckName}.jpg`, function () {
 
                         console.log("wrote image to root");
-                        res.json({
-                          message: "uploaded",
-                          url: `https://mtgchad.herokuapp.com/deck/${theFinalDeck.deckName}`,
-                        });
+
+                        const theHerokuPath = path.join(__dirname, `../decks/${theFinalDeck.deckName}.jpg`)
+                        console.log(theHerokuPath);
+                        
+                        
+                        
+                        const uploadFile = (fileName) => {
+                          // console.log("testing")
+                          // Read content from the file
+                          const fileContent = fs.readFileSync(fileName);
+                          // console.log("testing")
+
+                          // Setting up S3 upload parameters
+                          const params = {
+                              ACL: 'public-read',
+                              Bucket: BUCKET_NAME,
+                              Key: `${theFinalDeck.deckName}.jpg`, // File name you want to save as in S3
+                              Body: fileContent
+                          };
+                          // console.log("testing")
+
+                          // Uploading files to the bucket
+                          s3.upload(params, function(err, data) {
+                            
+                              if (err) {
+                                  throw err;
+                              };
+
+                              res.json({
+                                message: "uploaded",
+                                url: data.Location, // this is the URL you will find the sprite sheet at.
+                              });
+                              // console.log(`File uploaded successfully. ${data.Location}`);
+                          });
+                          // console.log("fin")
+
+                        };
+                       
+                        uploadFile(theHerokuPath);
+
                       });
                     });
                   });
