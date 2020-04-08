@@ -237,6 +237,11 @@ router.route("/").post((req, res) => {
   } else {
     res.json({ error: "Unable to Build Deck.", message: null });
   }
+}).catch(err => {
+  res.json({
+    message: "uploaded",
+    url: `https://mtgchad.herokuapp.com/deck/${cleanDeckName}`,
+  });
 });
 
 router.route("/").get((req, res) => {
