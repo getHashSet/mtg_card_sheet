@@ -48,9 +48,9 @@ export default class SearchCard extends Component {
           link: theLink,
           message: "Visit My Deck Page",
           button: "Build Deck",
-          chadsRequest: theLink,
+          chadsRequest: `https://mtgchad.herokuapp.com/deck/${deckName}`,
           cardBack: `mtgchad.herokuapp.com/back`,
-          cardData: `https://mtgchad.herokuapp.com/deck/${deckName}`
+          cardData: theLink
         });
       })
       .catch((err) => {
