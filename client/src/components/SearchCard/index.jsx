@@ -13,6 +13,8 @@ export default class SearchCard extends Component {
       link: "https://img.scryfall.com/cards/normal/front/7/2/7220aaa0-c457-4067-b1ff-360b161c34e5.jpg?1562850134",
       button: "Build Deck",
       message: "Not Ready Yet",
+      cardBack: `mtgchad.herokuapp.com/back`,
+      chadsRequest: "mtgchad.herokuapp.com/tron",
     };
     this.seachThisCardName = this.seachThisCardName.bind(this);
   }
@@ -33,7 +35,7 @@ export default class SearchCard extends Component {
       .post("/builder", {
         cardName: this.state.cardName,
         deck: this.state.textAreaContent,
-      })
+      }, { timeout: 50000})
       .then((res) => {
 
         let theLink = res.data.url 
@@ -44,6 +46,8 @@ export default class SearchCard extends Component {
           link: theLink,
           message: "Visit My Deck Page",
           button: "Build Deck",
+          chadsRequest: `mtgchad.herokuapp.com/deck/${deckName}`,
+          cardBack: `mtgchad.herokuapp.com/back`,
           cardData: theLink
         });
       })
@@ -52,6 +56,8 @@ export default class SearchCard extends Component {
           link: `https://mtgchad.herokuapp.com/deck/${deckName}`,
           button: "Build Deck",
           message: "Click here to visit Card Sheet",
+          chadsRequest: `mtgchad.herokuapp.com/deck/${deckName}`,
+          cardBack: `mtgchad.herokuapp.com/back`,
           cardData: `https://mtgchad.herokuapp.com/deck/${deckName}`
         });
       });
@@ -113,6 +119,12 @@ export default class SearchCard extends Component {
           <div style={aTag}>{this.state.message}</div>
         </a>
         <br />
+
+        <h3>URL will update below with deck builds.</h3>
+        <p>{this.state.chadsRequest}</p>
+
+        <h3>Card Back</h3>
+        <p>{this.state.cardBack}</p>
       </div>
     );
   }
