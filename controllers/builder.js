@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const axios = require("axios");
 const jimp = require("jimp");
-const fs = require('fs');
-const path = require('path');
-const AWS = require('aws-sdk');
+const fs = require("fs");
+const path = require("path");
+const AWS = require("aws-sdk");
 require("dotenv").config();
 
 // params for AWS bucket
@@ -12,14 +12,9 @@ const SECRET = process.env.S3_SECRET;
 const BUCKET_NAME = process.env.BUCKET_NAME;
 
 const s3 = new AWS.S3({
-    accessKeyId: ID,
-    secretAccessKey: SECRET
+  accessKeyId: ID,
+  secretAccessKey: SECRET,
 });
-
-
-
-
-
 
 axios.defaults.timeout = 100000;
 
@@ -52,6 +47,7 @@ router.route("/").post((req, res) => {
             .toLowerCase()
             .trim()
             .replace(/ /g, "+")}`,
+          defaults: 500000,
         })
           .then((scryfallData) => {
             res.send(scryfallData.data.image_uris.normal);
@@ -63,12 +59,11 @@ router.route("/").post((req, res) => {
       : res.send({ message: "No card found" });
   } else if (theDeck !== null) {
     if (theDeck.indexOf("Deck:") !== -1) {
-      theFinalDeck.deckName =
-        theDeck
-          .slice(+theDeck.indexOf("Deck:") + 6, +theDeck.indexOf("\n") - 4)
-          .trim()
-          .toLowerCase()
-          .replace(/ /g, "_");
+      theFinalDeck.deckName = theDeck
+        .slice(+theDeck.indexOf("Deck:") + 6, +theDeck.indexOf("\n") - 4)
+        .trim()
+        .toLowerCase()
+        .replace(/ /g, "_");
     } else {
       theFinalDeck.deckName = "untitled"; // make this random
     }
@@ -121,9 +116,19 @@ router.route("/").post((req, res) => {
       return axios({
         method: "GET",
         url: `https://api.scryfall.com/cards/named?fuzzy=${cardObj.name}`,
+        defaults: 1000000,
       })
         .then((scryfallData) => {
-          const cardURL = scryfallData.data.image_uris.normal;
+          let cardURL;
+
+          // check to see if this is a 2 faced card.
+          if (scryfallData.data.card_faces) {
+            cardURL = scryfallData.data.card_faces[0].image_uris.normal;
+            backOfCard = scryfallData.data.card_faces[1].image_uris.normal;
+            theFinalDeck["all60Cards"].push(backOfCard);
+          } else {
+            cardURL = scryfallData.data.image_uris.normal;
+          }
 
           for (let j = 0; j < cardObj.number; j++) {
             theFinalDeck["all60Cards"].push(cardURL);
@@ -148,7 +153,16 @@ router.route("/").post((req, res) => {
             url: `https://api.scryfall.com/cards/named?fuzzy=${cardObj.name}`,
           })
             .then((scryfallData) => {
-              const cardURL = scryfallData.data.image_uris.normal;
+              let cardURL;
+
+              // check to see if this is a 2 faced card.
+              if (scryfallData.data.card_faces) {
+                cardURL = scryfallData.data.card_faces[0].image_uris.normal;
+                backOfCard = scryfallData.data.card_faces[1].image_uris.normal;
+                theFinalDeck["all60Cards"].push(backOfCard);
+              } else {
+                cardURL = scryfallData.data.image_uris.normal;
+              }
 
               for (let j = 0; j < cardObj.number; j++) {
                 theFinalDeck["all60Cards"].push(cardURL);
@@ -173,7 +187,17 @@ router.route("/").post((req, res) => {
                 url: `https://api.scryfall.com/cards/named?fuzzy=${cardObj.name}`,
               })
                 .then((scryfallData) => {
-                  const cardURL = scryfallData.data.image_uris.normal;
+                  let cardURL;
+
+                  // check to see if this is a 2 faced card.
+                  if (scryfallData.data.card_faces) {
+                    cardURL = scryfallData.data.card_faces[0].image_uris.normal;
+                    backOfCard =
+                      scryfallData.data.card_faces[1].image_uris.normal;
+                    theFinalDeck["all60Cards"].push(backOfCard);
+                  } else {
+                    cardURL = scryfallData.data.image_uris.normal;
+                  }
 
                   for (let j = 0; j < cardObj.number; j++) {
                     theFinalDeck["all60Cards"].push(cardURL);
@@ -197,6 +221,8 @@ router.route("/").post((req, res) => {
                 // /////////
                 // // JIMP
                 // /////////
+                
+                if (theFinalDeck.all60Cards.length > 70){ return res.json({message: "too many cards", url:"Too many cards."})};
 
                 let cardWidth = 488;
                 let cardHeight = 680;
@@ -240,57 +266,57 @@ router.route("/").post((req, res) => {
 
                       image.quality(40);
 
-                      image.write(`./decks/${theFinalDeck.deckName}.jpg`, function () {
+                      image.write(
+                        `./decks/${theFinalDeck.deckName}.jpg`,
+                        function () {
+                          console.log("wrote image to root");
 
-                        console.log("wrote image to root");
+                          const theHerokuPath = path.join(
+                            __dirname,
+                            `../decks/${theFinalDeck.deckName}.jpg`
+                          );
+                          console.log(theHerokuPath);
 
-                        const theHerokuPath = path.join(__dirname, `../decks/${theFinalDeck.deckName}.jpg`)
-                        console.log(theHerokuPath);
-                        
-                        
-                        
-                        const uploadFile = (fileName) => {
-                          // console.log("testing")
-                          // Read content from the file
-                          const fileContent = fs.readFileSync(fileName);
-                          // console.log("testing")
+                          const uploadFile = (fileName) => {
+                            // console.log("testing")
+                            // Read content from the file
+                            const fileContent = fs.readFileSync(fileName);
+                            // console.log("testing")
 
-                          // Setting up S3 upload parameters
-                          const params = {
-                              ACL: 'public-read',
+                            // Setting up S3 upload parameters
+                            const params = {
+                              ACL: "public-read",
                               Bucket: BUCKET_NAME,
                               Key: `${theFinalDeck.deckName}.jpg`, // File name you want to save as in S3
-                              Body: fileContent
-                          };
-                          // console.log("testing")
+                              Body: fileContent,
+                            };
+                            // console.log("testing")
 
-                          // Uploading files to the bucket
-                          s3.upload(params, function(err, data) {
-                            
+                            // Uploading files to the bucket
+                            s3.upload(params, function (err, data) {
                               if (err) {
-                                  throw err;
-                              };
+                                throw err;
+                              }
 
-                              res.json({
+                              return res.json({
                                 message: "uploaded",
                                 url: data.Location, // this is the URL you will find the sprite sheet at.
                               });
                               // console.log(`File uploaded successfully. ${data.Location}`);
-                          });
-                          // console.log("fin")
+                            });
+                            // console.log("fin")
+                          };
 
-                        };
-                       
-                        uploadFile(theHerokuPath);
-
-                      });
+                          uploadFile(theHerokuPath);
+                        }
+                      );
                     });
                   });
               });
           });
       });
   } else {
-    res.json({ error: "Unable to Build Deck.", message: null });
+    return res.json({ error: "Unable to Build Deck.", message: null });
   }
 });
 
