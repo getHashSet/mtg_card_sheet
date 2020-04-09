@@ -122,7 +122,7 @@ router.route("/").post((req, res) => {
           let cardURL;
 
           // check to see if this is a 2 faced card.
-          if (scryfallData.data.card_faces) {
+          if (scryfallData.data.card_faces[0].image_uris && scryfallData.data.card_faces[1].image_uris) {
             cardURL = scryfallData.data.card_faces[0].image_uris.normal;
             backOfCard = scryfallData.data.card_faces[1].image_uris.normal;
             theFinalDeck["all60Cards"].push(backOfCard);
@@ -156,7 +156,7 @@ router.route("/").post((req, res) => {
               let cardURL;
 
               // check to see if this is a 2 faced card.
-              if (scryfallData.data.card_faces) {
+              if (scryfallData.data.card_faces[0].image_uris && scryfallData.data.card_faces[1].image_uris) {
                 cardURL = scryfallData.data.card_faces[0].image_uris.normal;
                 backOfCard = scryfallData.data.card_faces[1].image_uris.normal;
                 theFinalDeck["all60Cards"].push(backOfCard);
@@ -190,7 +190,7 @@ router.route("/").post((req, res) => {
                   let cardURL;
 
                   // check to see if this is a 2 faced card.
-                  if (scryfallData.data.card_faces) {
+                  if (scryfallData.data.card_faces[0].image_uris && scryfallData.data.card_faces[1].image_uris) {
                     cardURL = scryfallData.data.card_faces[0].image_uris.normal;
                     backOfCard =
                       scryfallData.data.card_faces[1].image_uris.normal;
