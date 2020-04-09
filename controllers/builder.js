@@ -122,10 +122,17 @@ router.route("/").post((req, res) => {
           let cardURL;
 
           // check to see if this is a 2 faced card.
-          if (scryfallData.data.card_faces[0].image_uris && scryfallData.data.card_faces[1].image_uris) {
-            cardURL = scryfallData.data.card_faces[0].image_uris.normal;
-            backOfCard = scryfallData.data.card_faces[1].image_uris.normal;
-            theFinalDeck["all60Cards"].push(backOfCard);
+          if (scryfallData.data.card_faces) {
+            if (
+              scryfallData.data.card_faces[0].image_uris !== undefined &&
+              scryfallData.data.card_faces[1].image_uris !== undefined
+            ) {
+              cardURL = scryfallData.data.card_faces[0].image_uris.normal;
+              backOfCard = scryfallData.data.card_faces[1].image_uris.normal;
+              theFinalDeck["all60Cards"].push(backOfCard);
+            } else {
+              cardURL = scryfallData.data.image_uris.normal;
+            }
           } else {
             cardURL = scryfallData.data.image_uris.normal;
           }
@@ -156,10 +163,18 @@ router.route("/").post((req, res) => {
               let cardURL;
 
               // check to see if this is a 2 faced card.
-              if (scryfallData.data.card_faces[0].image_uris && scryfallData.data.card_faces[1].image_uris) {
-                cardURL = scryfallData.data.card_faces[0].image_uris.normal;
-                backOfCard = scryfallData.data.card_faces[1].image_uris.normal;
-                theFinalDeck["all60Cards"].push(backOfCard);
+              if (scryfallData.data.card_faces) {
+                if (
+                  scryfallData.data.card_faces[0].image_uris !== undefined &&
+                  scryfallData.data.card_faces[1].image_uris !== undefined
+                ) {
+                  cardURL = scryfallData.data.card_faces[0].image_uris.normal;
+                  backOfCard =
+                    scryfallData.data.card_faces[1].image_uris.normal;
+                  theFinalDeck["all60Cards"].push(backOfCard);
+                } else {
+                  cardURL = scryfallData.data.image_uris.normal;
+                }
               } else {
                 cardURL = scryfallData.data.image_uris.normal;
               }
@@ -190,11 +205,20 @@ router.route("/").post((req, res) => {
                   let cardURL;
 
                   // check to see if this is a 2 faced card.
-                  if (scryfallData.data.card_faces[0].image_uris && scryfallData.data.card_faces[1].image_uris) {
-                    cardURL = scryfallData.data.card_faces[0].image_uris.normal;
-                    backOfCard =
-                      scryfallData.data.card_faces[1].image_uris.normal;
-                    theFinalDeck["all60Cards"].push(backOfCard);
+                  if (scryfallData.data.card_faces) {
+                    if (
+                      scryfallData.data.card_faces[0].image_uris !==
+                        undefined &&
+                      scryfallData.data.card_faces[1].image_uris !== undefined
+                    ) {
+                      cardURL =
+                        scryfallData.data.card_faces[0].image_uris.normal;
+                      backOfCard =
+                        scryfallData.data.card_faces[1].image_uris.normal;
+                      theFinalDeck["all60Cards"].push(backOfCard);
+                    } else {
+                      cardURL = scryfallData.data.image_uris.normal;
+                    }
                   } else {
                     cardURL = scryfallData.data.image_uris.normal;
                   }
@@ -221,8 +245,13 @@ router.route("/").post((req, res) => {
                 // /////////
                 // // JIMP
                 // /////////
-                
-                if (theFinalDeck.all60Cards.length > 70){ return res.json({message: "too many cards", url:"Too many cards."})};
+
+                if (theFinalDeck.all60Cards.length > 70) {
+                  return res.json({
+                    message: "too many cards",
+                    url: "Too many cards.",
+                  });
+                }
 
                 let cardWidth = 488;
                 let cardHeight = 680;
