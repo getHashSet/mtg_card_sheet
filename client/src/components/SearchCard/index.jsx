@@ -102,7 +102,7 @@ export default class SearchCard extends Component {
           placeholder="Copy From Decked App on Mobile"
         ></textarea>
         
-        <div className="btn" onClick={this.seachThisCardName} style={btn}>
+        <div id="build_button" className="btn" onClick={this.seachThisCardName} style={btn}>
           {this.state.button}
         </div>
 
