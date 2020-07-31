@@ -54,19 +54,19 @@ export default class SearchCard extends Component {
           link: theLink,
           message: "Visit My Deck Page",
           button: "Build Deck",
-          chadsRequest: `https://mtgchad.herokuapp.com/deck/${deckName}`,
-          cardBack: `mtgchad.herokuapp.com/back`,
+          chadsRequest: `https://manaleaks.com/deck/${deckName}`,
+          cardBack: `manaleaks.com/back`,
           cardData: theLink
         });
       })
       .catch((err) => {
         this.setState({
-          link: `https://mtgchad.herokuapp.com/deck/${deckName}`,
+          link: `https://manaleaks.com/deck/${deckName}`,
           button: "Build Deck",
           message: "Click here to visit Card Sheet",
-          chadsRequest: `mtgchad.herokuapp.com/deck/${deckName}`,
-          cardBack: `mtgchad.herokuapp.com/back`,
-          cardData: `https://mtgchad.herokuapp.com/deck/${deckName}`
+          chadsRequest: `manaleaks.com/deck/${deckName}`,
+          cardBack: `manaleaks.com/back`,
+          cardData: `https://manaleaks.com/deck/${deckName}`
         });
       });
   };
