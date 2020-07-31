@@ -13,6 +13,8 @@ router.use("/back", backController);
 
 router.use("/single", singleController);
 
+router.use("/card", singleController);
+
 router.use("/token", tokenController);
 
 router.use("/api/example", exampleController);
