@@ -5,12 +5,15 @@ const builderController = require("./builder");
 const deckController = require("./deck.controller");
 const backController = require("./back.controller");
 const singleController = require("./single.controller");
+const tokenController = require("./token.controller");
 
 router.use("/deck", deckController);
 
 router.use("/back", backController);
 
 router.use("/single", singleController);
+
+router.use("/token", tokenController);
 
 router.use("/api/example", exampleController);
 
