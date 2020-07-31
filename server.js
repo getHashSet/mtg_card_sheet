@@ -12,7 +12,7 @@ require('dotenv').config()
 
 
 const express = require('express');
-const enforce = require('express-sslify');
+// const enforce = require('express-sslify');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const session = require('express-session');
@@ -21,7 +21,7 @@ const passport = require('./utils/passport');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
-app.use(enforce.HTTPS({ trustProtoHeader: true })); //force ssl
+// app.use(enforce.HTTPS({ trustProtoHeader: true })); //force ssl
 const routes = require("./controllers");
 
 
