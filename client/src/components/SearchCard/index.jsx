@@ -17,17 +17,12 @@ export default class SearchCard extends Component {
       message: "Not Ready Yet",
       cardBack: `manaleaks.com/back`,
       chadsRequest: "manaleaks.com/tron",
-      deckName: "",
     };
     this.seachThisCardName = this.seachThisCardName.bind(this);
   }
 
   seachThisCardName = () => {
-    let deckName;
-    if (this.state.deckName !== null && this.state.deckName !== "") {
-      deckName = this.state.deckName;
-    } else {
-      deckName = this.state.textAreaContent
+    let deckName = this.state.textAreaContent
       .slice(
         this.state.textAreaContent.indexOf("Deck: ") + 6,
         this.state.textAreaContent.indexOf(".dec")
@@ -35,7 +30,6 @@ export default class SearchCard extends Component {
       .trim()
       .replace(/ /g, "_")
       .toLowerCase();
-    }
 
     this.setState({ button: "loading..." });
 
@@ -54,7 +48,7 @@ export default class SearchCard extends Component {
           link: theLink,
           message: "Visit My Deck Page",
           button: "Build Deck",
-          chadsRequest: `https://manaleaks.com/deck/${deckName}`,
+          chadsRequest: `manaleaks.com/deck/${deckName}`,
           cardBack: `manaleaks.com/back`,
           cardData: theLink
         });
@@ -77,12 +71,6 @@ export default class SearchCard extends Component {
     });
   };
 
-  deckNameChange = (event) => {
-    this.setState({
-      deckName: event.target.value,
-    })
-  }
-
   textAreaChange = (event) => {
     this.setState({
       textAreaContent: event.target.value,
@@ -103,14 +91,8 @@ export default class SearchCard extends Component {
         /> */}
 
         <h1>Card Sheet Builder</h1>
-        <input 
-        type="text"
-        placeholder="Deck Name"
-        onChange={this.deckNameChange}
-        style={inputStyle}
-        />
 
-        <p>Paste mobile version of Deck Builder content here then click Build.</p>
+        <p>Paste mobile version of <a href="https://www.deckedbuilder.com/" target="_blank" rel="noopener noreferrer">Deck Builder</a> content here then click Build.</p>
 
         <textarea
           name="card_input"
