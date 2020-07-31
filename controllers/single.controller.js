@@ -35,11 +35,11 @@ router.route("/:id").get((req, res) => {
 
           const theHerokuPath = path.join(
             __dirname,
-            `../decks/${cardName}.jpg`
+            `../cards/${cardName}.jpg`
           );
 
           console.log(theHerokuPath);
-          res.redirect(path.join(__dirname, `../cards/${cardName}.jpg`));
+          res.sendFile(path.join(__dirname, `../cards/${cardName}.jpg`));
         });
       });
     })

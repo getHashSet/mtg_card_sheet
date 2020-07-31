@@ -8,14 +8,18 @@ const singleController = require("./single.controller");
 const tokenController = require("./token.controller");
 
 router.use("/deck", deckController);
+router.use("/decks", deckController);
 
 router.use("/back", backController);
+router.use("/backs", backController);
 
 router.use("/single", singleController);
 
 router.use("/card", singleController);
+router.use("/cards", singleController);
 
 router.use("/token", tokenController);
+router.use("/tokens", tokenController);
 
 router.use("/api/example", exampleController);
 
