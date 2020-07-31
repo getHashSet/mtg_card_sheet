@@ -3,6 +3,7 @@ import React from 'react'
 export default function Footer() {
     return (
         <div className="footer_root" style={footerStyle}>
+            <p>Currently Disabled. Sideboard, Tokens, Search &amp; Preview -- &nbs;</p>
             <p>&copy; 2020</p>
         </div>
     )

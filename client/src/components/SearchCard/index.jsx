@@ -15,14 +15,19 @@ export default class SearchCard extends Component {
       link: "https://img.scryfall.com/cards/normal/front/7/2/7220aaa0-c457-4067-b1ff-360b161c34e5.jpg?1562850134",
       button: "Build Deck",
       message: "Not Ready Yet",
-      cardBack: `mtgchad.herokuapp.com/back`,
-      chadsRequest: "mtgchad.herokuapp.com/tron",
+      cardBack: `manaleaks.com/back`,
+      chadsRequest: "manaleaks.com/tron",
+      deckName: "",
     };
     this.seachThisCardName = this.seachThisCardName.bind(this);
   }
 
   seachThisCardName = () => {
-    let deckName = this.state.textAreaContent
+    let deckName;
+    if (this.state.deckName !== null && this.state.deckName !== "") {
+      deckName = this.state.deckName;
+    } else {
+      deckName = this.state.textAreaContent
       .slice(
         this.state.textAreaContent.indexOf("Deck: ") + 6,
         this.state.textAreaContent.indexOf(".dec")
@@ -30,6 +35,7 @@ export default class SearchCard extends Component {
       .trim()
       .replace(/ /g, "_")
       .toLowerCase();
+    }
 
     this.setState({ button: "loading..." });
 
@@ -71,6 +77,12 @@ export default class SearchCard extends Component {
     });
   };
 
+  deckNameChange = (event) => {
+    this.setState({
+      deckName: event.target.value,
+    })
+  }
+
   textAreaChange = (event) => {
     this.setState({
       textAreaContent: event.target.value,
@@ -90,7 +102,15 @@ export default class SearchCard extends Component {
           style={inputStyle}
         /> */}
 
-        <p>Paste iOS version of Deck Builder content here then click Build.</p>
+        <h1>Card Sheet Builder</h1>
+        <input 
+        type="text"
+        placeholder="Deck Name"
+        onChange={this.deckNameChange}
+        style={inputStyle}
+        />
+
+        <p>Paste mobile version of Deck Builder content here then click Build.</p>
 
         <textarea
           name="card_input"
