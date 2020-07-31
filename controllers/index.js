@@ -19,7 +19,7 @@ router.use("/token", tokenController);
 
 router.use("/api/example", exampleController);
 
-router.use("/card", searchSingleCardController);
+// router.use("/card", searchSingleCardController);
 
 router.use("/builder", builderController);
 
