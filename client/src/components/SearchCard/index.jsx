@@ -81,14 +81,14 @@ export default class SearchCard extends Component {
     return (
       <div className="search_card_root" style={searchCardRoot}>
 
-        <p>Enter a Card name here and click Build to see that card.</p>
+        {/* <p>Enter a Card name here and click Build to see that card.</p> */}
 
-        <input
+        {/* <input
           type="text"
           onChange={this.inputChange}
           placeholder="Card Name"
           style={inputStyle}
-        />
+        /> */}
 
         <p>Paste iOS version of Deck Builder content here then click Build.</p>
 
